@@ -11,3 +11,8 @@ docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin
 3. Create user roles
 4. Create users and assign them roles
 ```
+
+### postgres docker
+```
+docker run --name postgres-sso -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -p 5434:5432 -d postgres
+```
