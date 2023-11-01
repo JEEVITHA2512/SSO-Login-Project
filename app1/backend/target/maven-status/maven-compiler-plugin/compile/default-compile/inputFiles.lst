@@ -4,6 +4,7 @@
 /home/santhosh/projects/cognizant-sso-login/app1/backend/src/main/java/api1/service/OrderService.java
 /home/santhosh/projects/cognizant-sso-login/app1/backend/src/main/java/api1/repo/OrderRepo.java
 /home/santhosh/projects/cognizant-sso-login/app1/backend/src/main/java/api1/Api1Application.java
+/home/santhosh/projects/cognizant-sso-login/app1/backend/src/main/java/api1/entity/OrderJson.java
 /home/santhosh/projects/cognizant-sso-login/app1/backend/src/main/java/api1/entity/Order.java
 /home/santhosh/projects/cognizant-sso-login/app1/backend/src/main/java/api1/service/impl/OrderServiceImpl.java
 /home/santhosh/projects/cognizant-sso-login/app1/backend/src/main/java/api1/dto/mapper/OrderMapper.java

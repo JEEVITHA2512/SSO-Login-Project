@@ -2,6 +2,7 @@ package api1.service;
 
 import api1.dto.request.OrderRequest;
 import api1.dto.response.OrderResponse;
+import api1.entity.OrderJson;
 import api1.entity.Order;
 
 import java.util.List;

@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.*;
 
@@ -16,6 +17,7 @@ import api1.dto.request.OrderRequest;
 import api1.dto.response.OrderResponse;
 import api1.entity.Order;
 import api1.service.OrderService;
+import api1.entity.OrderInput;
 
 @RestController
 public class ApiController {
@@ -32,21 +34,15 @@ public class ApiController {
     }
 
 	@PostMapping(path="api/add/order")
-	public String addOrder(String name, String category, Long price){
-		try{
+	public OrderResponse addOrder(@RequestBody OrderInput orderInput){
 			OrderRequest or = new OrderRequest();
-			or.setName(name);
-			or.setCategory(category);
+			or.setName(orderInput.name);
+			or.setCategory(orderInput.category);
 			Date today = new Date();
 			or.setDateOfOrder(today);
-			or.setPrice(price);
+			or.setPrice(orderInput.price);
 			OrderResponse resp = orderService.saveOrder(or);
-			return "Success";
-		}
-		catch (Exception e){
-			e.printStackTrace();
-			return "Error";
-		}
+			return resp;
 	}
 
 	@PreAuthorize("hasRole('read-access-1')")
@@ -59,6 +55,12 @@ public class ApiController {
 	@GetMapping(path = "/check/write")
 	public String users() {
 	    return  "You have write privilages";
+	}
+
+	@PreAuthorize("hasRole('admin-access-2')")
+	@GetMapping(path="/check/admin")
+	public int is_admin(){
+		return 1;
 	}
 	
 	@GetMapping(path = "/anon")
