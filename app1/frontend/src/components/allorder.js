@@ -43,6 +43,7 @@ export default function AllOrder(){
         const response = await fetch('http://localhost:8002/check/admin',{
             headers:{
                 'Authorization':'Bearer '+localStorage.getItem("bearer-token"),
+                "Access-Control-Allow-Origin": "*",
             }});
         const users = await response.json();
         setData(users);

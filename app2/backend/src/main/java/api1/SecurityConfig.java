@@ -19,6 +19,12 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import org.keycloak.adapters.springsecurity.client.KeycloakClientRequestFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
+
+
 @EnableWebSecurity // @Configuration is included in this annotation
 @ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
@@ -32,6 +38,15 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 		keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
 		auth.authenticationProvider(keycloakAuthenticationProvider);
 	}
+
+	@Autowired
+    public KeycloakClientRequestFactory keycloakClientRequestFactory;
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public KeycloakRestTemplate keycloakRestTemplate() {
+        return new KeycloakRestTemplate(keycloakClientRequestFactory);
+    }
 
 	// keycloakConfigResolver defines that we want to use the Spring Boot properties
 	// file support instead of the default keycloak.json.
@@ -52,7 +67,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 		super.configure(http);
 		http.cors().and()
 		.csrf().disable()
-		.authorizeRequests().anyRequest().permitAll();
+		.authorizeRequests().antMatchers("/api/users/*").hasRole("admin-access-2").anyRequest().permitAll();
 	}
 
 	@Bean
