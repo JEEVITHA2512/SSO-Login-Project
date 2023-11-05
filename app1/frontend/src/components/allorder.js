@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import './allorder.css';
 
 const centerTextStyle = {
@@ -8,15 +8,15 @@ const centerTextStyle = {
 function OrderTable(table){
     return (
       <div className="App">
-      <h1 style={centerTextStyle}>LIST OF OREDERS</h1>
+      <h1 style={centerTextStyle}>LIST OF ORDERS</h1>
       <div className="App-header">
         <table>
           <thead>
             <tr>
               <th>Item No</th>
               <th>Item Name</th>
-              <th>Date of Ordered</th>
-              <th>Price of 10 Items</th>
+              <th>Date of Order</th>
+              <th>Price of Item</th>
             </tr>
           </thead>
           <tbody>
@@ -68,7 +68,7 @@ export default function AllOrder(){
 
     return (
         <Fragment>
-        {data==1 ? (<OrderTable table={table}/>) : (<h1>Not Authorized to view all products</h1>)}
+        {data===1 ? (<OrderTable table={table}/>) : (<h1>Not Authorized to view all products</h1>)}
         </Fragment>
     );
 }

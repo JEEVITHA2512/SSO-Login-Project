@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import keycloak from './keycloak-init';
+import $ from "jquery";
 
 const centerTextStyle = {
     textAlign: 'center',
@@ -7,6 +8,7 @@ const centerTextStyle = {
 
 function UserTable(tabledata){
     console.log(tabledata)
+    if (tabledata.tabledata==0) return (<></>)
     return (
         <div className="App">
           <h1 style={centerTextStyle}>User Details</h1>
@@ -38,7 +40,8 @@ function UserTable(tabledata){
 }
 
 export default function UserList(){
-    const [data, setData] = useState(0)
+    const [data, setData] = useState(0);
+    const [admin, setAdmin] = useState(0);
 
     let url = 'http://localhost:8080/admin/realms/sso-login/users'
 
@@ -55,9 +58,23 @@ export default function UserList(){
 
     useEffect(() => {
         fetch_users();
+        $.ajax({
+          type: "GET",
+          url: "http://localhost:8004/check/admin",
+          headers : {
+             'Authorization': 'Bearer ' + localStorage.getItem("bearer-token")
+          },
+          success: function (response) {
+            setAdmin(response);
+          },
+          error: function () {
+            console.log("Error loading data");
+            setData(0);
+          }
+        });
     },[]);
 
     console.log("v",data);
 
-    return (data==0 ? (<h1>Loading</h1>) : (<UserTable tabledata={data}/>))
+    return (admin==0 ? (<h1>Not Authorized</h1>) : (<UserTable tabledata={data}/>))
 }
