@@ -20,20 +20,17 @@ By achieving these objectives, the project aims to provide a robust, secure, and
 ### Explanation Video Drive Link 
 ```
 https://drive.google.com/file/d/1HHsYqdvTtazz-p91LNGX2cYBO3XFepXF/view?usp=sharing
-'''
+
+```
 
 ## PREREQUISITES
 - Docker
 - Docker Compose Plugin
 
 ## Run the project
-### Create the .env file
+```
+Create the .env file
 Create the .env file based on the .env.sample file
-### Build the docker images
-```
 docker compose up --build
-```
-### Running the app after building
-```
 docker compose up
 ```
