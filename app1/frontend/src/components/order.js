@@ -10,7 +10,7 @@ function ProductForm() {
     e.preventDefault();
 
     // Backend URL where you want to send the POST request
-    const apiUrl = 'http://localhost:8002/api/add/order';
+    const apiUrl = `${process.env.REACT_APP_BACKEND_HOST}/api/add/order`;
 
     // Create a data object with individual parameters
     const data = {
@@ -18,8 +18,6 @@ function ProductForm() {
       category,
       price: parseInt(price), // Convert price to a integer
     };
-
-    console.log("s",JSON.stringify(data));
 
     // Create the POST request
     fetch(apiUrl, {

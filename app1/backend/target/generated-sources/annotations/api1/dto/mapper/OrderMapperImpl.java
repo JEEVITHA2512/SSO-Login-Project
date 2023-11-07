@@ -7,7 +7,7 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-04T17:27:01+0530",
+    date = "2023-11-05T17:14:01+0530",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.20.1 (Ubuntu)"
 )
 public class OrderMapperImpl implements OrderMapper {

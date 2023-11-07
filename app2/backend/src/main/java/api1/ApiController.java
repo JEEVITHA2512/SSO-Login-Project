@@ -53,7 +53,8 @@ public class ApiController {
 
 	@PostMapping(path = "/get/user")
 	public String getUserDetails(@RequestBody UserName username) throws Exception{
-		String url = "http://localhost:8080/realms/sso-login/protocol/openid-connect/token";
+		String keycloak_host = System.getenv("KEYCLOAK_AUTH_SERVER_URL");
+		String url = keycloak_host+"/realms/sso-login/protocol/openid-connect/token";
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 
 		connection.setRequestMethod("POST");
@@ -98,7 +99,7 @@ public class ApiController {
             // Disconnect the connection
             connection.disconnect();
 
-		url = "http://localhost:8080/admin/realms/sso-login/users";
+		url = keycloak_host+"/admin/realms/sso-login/users";
 		params = "?username="+username.username;
 
 		connection = (HttpURLConnection) new URL(url+params).openConnection();
@@ -136,16 +137,10 @@ public class ApiController {
 		
 	}
 
-	@PreAuthorize("hasRole('admin-access-2')")
+	@PreAuthorize("hasRole('admin-access')")
 	@GetMapping(path = "/check/admin")
 	public int mod() {
         return 1;
-	}
-	
-	@PreAuthorize("hasRole('customer-access-2')")
-	@GetMapping(path = "/check/customer")
-	public String users() {
-	    return  "You have customer privilages";
 	}
 	
 	@GetMapping(path = "/anon")

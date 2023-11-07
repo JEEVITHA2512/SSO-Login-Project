@@ -1,0 +1,116 @@
+version: '3.5'
+
+services:
+  db:
+    container_name: postgres_db
+    image: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/data/postgres
+      - POSTGRES_DB=sso-login
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5434:5432"
+    networks:
+      - db
+    expose:
+      - 5434
+
+  keycloak-idp:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:22.0.4
+    volumes:
+      - ./imports:/opt/keycloak/data/import
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN_USER}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/sso-login.json
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+    networks:
+      - db
+    entrypoint: ["/opt/keycloak/bin/kc.sh","start-dev","--import-realm"]
+
+  app1-backend:
+    container_name: backend1
+    build:
+      context: app1/backend
+    networks:
+      - db
+    depends_on:
+      - db
+      - keycloak-idp
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/sso-login
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - KEYCLOAK_AUTH_SERVER_URL=http://${HOSTNAME}:8080
+    ports:
+      - "8002:8002"
+    expose:
+      - 8002
+
+  app2-backend:
+    container_name: backend2
+    build:
+      context: app2/backend
+    networks:
+      - db
+    depends_on:
+      - db
+      - keycloak-idp
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/sso-login
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - KEYCLOAK_AUTH_SERVER_URL=http://${HOSTNAME}:8080
+    ports:
+      - "8004:8004"
+    expose:
+      - 8004
+  
+  app1-frontend:
+    container_name: app1-frontend
+    build:
+      context: app1/frontend
+    ports:
+      - 8001:8001
+    networks:
+      - db
+    depends_on:
+      - app1-backend
+      - keycloak-idp
+    environment:
+      - REACT_APP_KEYCLOAK_HOST=http://${HOSTNAME}:8080
+      - REACT_APP_BACKEND_HOST=http://${HOSTNAME}:8002
+    expose:
+      - 8001
+
+  app2-frontend:
+    container_name: app2-frontend
+    build:
+      context: app2/frontend
+    ports:
+      - 8003:8003
+    networks:
+      - db
+    depends_on:
+      - app2-backend
+      - keycloak-idp
+    environment:
+      - REACT_APP_KEYCLOAK_HOST=http://${HOSTNAME}:8080
+      - REACT_APP_BACKEND_HOST=http://${HOSTNAME}:8004
+    expose:
+      - 8003
+
+networks:
+  db:
+    driver: bridge
+volumes:
+  db: {}

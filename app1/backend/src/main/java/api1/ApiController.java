@@ -45,19 +45,7 @@ public class ApiController {
 			return resp;
 	}
 
-	@PreAuthorize("hasRole('read-access-1')")
-	@GetMapping(path = "/check/read")
-	public String mod() {
-        return "You have read privilages";
-	}
-	
-	@PreAuthorize("hasRole('write-access-1')")
-	@GetMapping(path = "/check/write")
-	public String users() {
-	    return  "You have write privilages";
-	}
-
-	@PreAuthorize("hasRole('admin-access-2')")
+	@PreAuthorize("hasRole('admin-access')")
 	@GetMapping(path="/check/admin")
 	public int is_admin(){
 		return 1;

@@ -1,7 +1,7 @@
 import Keycloak from "keycloak-js";
 
 let initOptions = {
-    url: 'http://localhost:8080', 
+    url: `${process.env.REACT_APP_KEYCLOAK_HOST}`, 
     realm: 'sso-login', 
     clientId: 'react-login-client-2', 
     onLoad: 'login-required',
@@ -20,7 +20,6 @@ keycloak.init({ onLoad: 'login-required' }).then((auth) => {
 
     localStorage.setItem("bearer-token", keycloak.token);
     localStorage.setItem("refresh-token", keycloak.refreshToken);
-    console.log(keycloak.token);
 
     setTimeout(() => {
         keycloak.updateToken(70).then((refreshed) => {

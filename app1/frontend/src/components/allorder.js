@@ -40,30 +40,25 @@ export default function AllOrder(){
     const [table,setTable] = useState([]);
 
     async function is_admin(){
-        const response = await fetch('http://localhost:8002/check/admin',{
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/check/admin`,{
             headers:{
                 'Authorization':'Bearer '+localStorage.getItem("bearer-token"),
                 "Access-Control-Allow-Origin": "*",
             }});
         const users = await response.json();
         setData(users);
-        console.log(data);
     }
 
     async function getOrders() {
-        const response = await fetch('http://localhost:8002/api/orders');
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/orders`);
         const users = await response.json();
         setTable(users);
-        console.log(table);
       }
     
     useEffect(() => {
         is_admin();
         getOrders();
     },[]);
-
-    console.log("table",table);
-    console.log("data",data);
 
 
     return (

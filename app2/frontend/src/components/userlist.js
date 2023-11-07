@@ -7,7 +7,6 @@ const centerTextStyle = {
   };
 
 function UserTable(tabledata){
-    console.log(tabledata)
     if (tabledata.tabledata==0) return (<></>)
     return (
         <div className="App">
@@ -43,7 +42,7 @@ export default function UserList(){
     const [data, setData] = useState(0);
     const [admin, setAdmin] = useState(0);
 
-    let url = 'http://localhost:8080/admin/realms/sso-login/users'
+    let url = `${process.env.REACT_APP_KEYCLOAK_HOST}/admin/realms/sso-login/users`
 
     
     async function fetch_users(){
@@ -53,14 +52,13 @@ export default function UserList(){
             }});
         const users = await response.json();
         setData(users);
-        console.log(data);
     };
 
     useEffect(() => {
         fetch_users();
         $.ajax({
           type: "GET",
-          url: "http://localhost:8004/check/admin",
+          url: `${process.env.REACT_APP_BACKEND_HOST}/check/admin`,
           headers : {
              'Authorization': 'Bearer ' + localStorage.getItem("bearer-token")
           },
@@ -74,7 +72,6 @@ export default function UserList(){
         });
     },[]);
 
-    console.log("v",data);
 
     return (admin==0 ? (<h1>Not Authorized</h1>) : (<UserTable tabledata={data}/>))
 }

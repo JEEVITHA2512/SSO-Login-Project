@@ -28,7 +28,6 @@ keycloak.init({ onLoad: 'login-required' }).then((auth) => {
 
     localStorage.setItem("bearer-token", keycloak.token);
     localStorage.setItem("refresh-token", keycloak.refreshToken);
-    console.log(keycloak.token);
 
     setTimeout(() => {
         keycloak.updateToken(70).then((refreshed) => {

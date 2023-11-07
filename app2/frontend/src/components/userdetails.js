@@ -3,10 +3,9 @@ import { jwtDecode } from "jwt-decode";
 
 export default function UserDetails(){
     let username = jwtDecode(localStorage.getItem("bearer-token")).preferred_username
-    console.log("username",username)
     const [data, setData] = useState(0)
 
-    let url = 'http://localhost:8004/get/user'
+    let url = `${process.env.REACT_APP_BACKEND_HOST}/get/user`
 
     let params = {"username":username, };
 
@@ -19,16 +18,13 @@ export default function UserDetails(){
             },
             body: JSON.stringify(params),});
         const users = await response.text();
-        console.log("s",users);
         setData(JSON.parse(users)[0]);
-        console.log(data);
     };
 
     useEffect(() => {
         fetch_users();
     },[]);
 
-    console.log("v",data);
 
     return (
         <div className='box'>

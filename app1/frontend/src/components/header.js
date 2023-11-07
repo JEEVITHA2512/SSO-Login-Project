@@ -8,7 +8,7 @@ export default function Header(){
         useEffect(()=> {
           $.ajax({
             type: "GET",
-            url: "http://localhost:8002/check/admin",
+            url: `${process.env.REACT_APP_BACKEND_HOST}/check/admin`,
             headers : {
                'Authorization': 'Bearer ' + localStorage.getItem("bearer-token")
             },
